@@ -107,10 +107,9 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             // Open a modal or navigate to a new page for editing the shortcut
             // You can pass the current shortcut and fullMessage values to the editing page/modal
             // for pre-filling the input fields
-            // Implement your logic here
             const newShortcutInput = document.createElement('input');
             newShortcutInput.value = shortcut;
-            const newFullMessageInput = document.createElement('input');
+            const newFullMessageInput = document.createElement('textarea');
             newFullMessageInput.value = fullMessage;
             // Hide the original li value, edit button, and delete button
             li.textContent = '';
@@ -130,6 +129,12 @@ chrome.storage.local.get(['shortcuts'], function(result) {
                         shortcuts[index].fullMessage = newFullMessage;
                         saveToStorage(shortcuts);
                         li.textContent = `${newShortcut} - ${newFullMessage}`;
+                        // Create a span element to wrap the shortcut message
+                        const shortcutMessageSpan = document.createElement('span');
+                        shortcutMessageSpan.textContent = `${newShortcut} - ${newFullMessage}`;
+
+                        // Append the span element to the li element
+                        li.appendChild(shortcutMessageSpan);
                         li.removeChild(newShortcutInput);
                         li.removeChild(newFullMessageInput);
                         li.removeChild(saveButton);

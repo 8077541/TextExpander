@@ -5,42 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Options</title>
     <style>
+        html {
+    min-height: 100vh;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    background-repeat:no-repeat;
+    background: rgb(242,167,69);
+    background: linear-gradient(3deg, rgba(242,167,69,0.9725140056022409) 15%, rgba(196,32,255,1) 100%);
+}
         body {
             font-family: Arial, sans-serif;
-            background-color: #660099;
+            /* background-color: #1d1d1d; */
             font-size: 25px;
         }
         button{
-            background-color: #ff6600;
-            color: rgb(10, 10, 10);
+            background-color: #660099;
             color: white;
             font-weight: 700;
             border: none;
-            border-radius: 10px;
             border: black;
             border-style: solid;
             border-width: 1px;
             height: 30px;
         }
         button:hover {
-            background-color: #660099;
+            background-color: #ff6600;
             cursor: pointer;
             color: white;
         }
         .container {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+            margin-top: 20px;
+            margin-inline: auto;
+            display: flex;
+            flex-direction: column;
+
             background-color: aliceblue;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 10px 5px 5px #ff6600;
-            border: black;
+            box-shadow: 5px 2px 2px rgba(40, 40, 40, 0.1);
+            border: rgb(54, 54, 54);
             border-style: solid;
             border-width: 2px;
-            min-width: 50%;
+            max-width: 80%;
+     
            
         }
         .options-panel {
@@ -52,7 +62,8 @@
         }
         #CreateButton {
             margin-left: 10px;
-            height: 30px;
+            height: 40px;
+            font-size: 20px;
         }
         .inputs-container {
             display: inline-flex;
@@ -84,12 +95,36 @@
             margin: 10px;
             border-radius: 5px;
             background-color:rgb(227, 235, 242);
-            color: rgb(14, 14, 14);
+            color: rgb(28, 27, 27);
+            font-weight: 600;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        li:hover{
+            background-color: #a6a6a6;
+            color: white;
+        }
+        li input {
+            float: left;
+            width: 200px;
+            margin-right: 10px;
+          
         }
         li button {
             float: right;
             width: 55px;
+            vertical-align: middle;
+            margin-left: 5px;
         }
+        li textarea{
+            width: 380px;
+            font-size: 15px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #660099;
+            height: 120px;
+            vertical-align: middle
+        }   
 
 </style>
 </head>
@@ -98,10 +133,10 @@
         
         <div class="inputs-container">
             <div class="input-container">
-                <input type="text" id="CreateShortcut" placeholder="shortcut">
+                <input type="text" id="CreateShortcut" placeholder="SHORTCUT">
             </div>
             <div class="input-container">
-                <textarea type="text" id="CreateFullMessage" placeholder="full message"></textarea>
+                <textarea type="text" id="CreateFullMessage" placeholder="FULL MESSAGE"></textarea>
             </div>
             <button id="CreateButton" class="add-input-button">Add Shortcut</button>
             
