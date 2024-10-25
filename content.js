@@ -49,7 +49,18 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             const reg = new RegExp(escapedShortcut, 'g');
             inputValue = inputValue.replace(reg, fullMessage);
         });
-    
+        // Find all textareas with class "value" and update their values
+        const textareas = document.querySelectorAll('textarea.value');
+        textareas.forEach(textarea => {
+            const shortcut = textarea.getAttribute('shortcut');
+            const fullMessage = textarea.getAttribute('fullMessage');
+            if (shortcut && fullMessage) {
+                const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const reg = new RegExp(escapedShortcut, 'g');
+                const inputValue = textarea.value.replace(reg, fullMessage);
+                textarea.value = inputValue;
+            }
+        });
         input.value = inputValue;
     }
     
