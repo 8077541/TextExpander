@@ -64,9 +64,15 @@ chrome.storage.local.get(['shortcuts'], function(result) {
 
     // Event listener to detect typing in input fields
     document.addEventListener('input', debounce(function(event) {
-        const focusedElement = document.activeElement;
-        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA' || focusedElement.tagName === 'DIV' || focusedElement.tagName === 'SPAN') {
-            replaceText(event, shortcuts);
+        let focusedElement = event.target;
+        
+        // Traverse up the DOM tree to check if the focused element is nested within an input or textarea
+        while (focusedElement && focusedElement !== document) {
+            if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA' || focusedElement.tagName === 'DIV' || focusedElement.tagName === 'SPAN') {
+                replaceText(event, shortcuts);
+                break;
+            }
+            focusedElement = focusedElement.parentElement;
         }
     }, 100)); // Adjust debounce delay as needed
 });
