@@ -66,13 +66,9 @@ chrome.storage.local.get(['shortcuts'], function(result) {
     document.addEventListener('input', debounce(function(event) {
         let focusedElement = event.target;
         
-        // Traverse up the DOM tree to check if the focused element is nested within an input or textarea
-        while (focusedElement && focusedElement !== document) {
-            if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA' || focusedElement.tagName === 'DIV' || focusedElement.tagName === 'SPAN') {
-                replaceText(event, shortcuts);
-                break;
-            }
-            focusedElement = focusedElement.parentElement;
+        // Check if the focused element is an input or textarea
+        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA') {
+            replaceText(event, shortcuts);
         }
     }, 100)); // Adjust debounce delay as needed
 });
