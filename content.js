@@ -43,16 +43,16 @@ chrome.storage.local.get(['shortcuts'], function(result) {
     function replaceText(event, shortcuts) {
         const input = event.target;
         let inputValue = input.value;
-
+    
         shortcuts.forEach(({ shortcut, fullMessage }) => {
             const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const reg = new RegExp(escapedShortcut, 'g');
             inputValue = inputValue.replace(reg, fullMessage);
         });
-
+    
         input.value = inputValue;
     }
-
+    
     // Debounce function to limit the rate of input event handling
     function debounce(func, wait) {
         let timeout;
@@ -61,16 +61,20 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
-
+    
     // Event listener to detect typing in input fields
-    document.addEventListener('input', debounce(function(event) {
+    function handleEvent(event) {
         let focusedElement = event.target;
         
         // Check if the focused element is an input or textarea
         if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA') {
             replaceText(event, shortcuts);
         }
-    }, 100)); // Adjust debounce delay as needed
+    }
+    
+    document.addEventListener('input', debounce(handleEvent, 100)); // Adjust debounce delay as needed
+    document.addEventListener('keydown', debounce(handleEvent, 100)); // Adjust debounce delay as needed
+    document.addEventListener('keyup', debounce(handleEvent, 100)); // Adjust debounce delay as needed // Adjust debounce delay as needed
 });
 
 
