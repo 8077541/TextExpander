@@ -3,14 +3,15 @@ function saveToStorage(shortcuts) {
     chrome.storage.local.set({ 'shortcuts': shortcuts }, function() {
         console.log('Shortcuts and full messages saved to storage');
     });
- location.reload(); 
+ location.reload();
 }
 // Function to wipe the storage
 function wipeStorage() {
     chrome.storage.local.clear(function() {
         console.log('Storage wiped');
+        location.reload();
     });
-   location.reload();
+
 }
 // Example usage
 const shortcuts = [
@@ -64,24 +65,32 @@ chrome.storage.local.get(['shortcuts'], function(result) {
     // Event listener to detect typing in input fields
     document.addEventListener('input', debounce(function(event) {
         const focusedElement = document.activeElement;
-        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA') {
+        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA' || focusedElement.tagName === 'DIV' || focusedElement.tagName === 'SPAN') {
             replaceText(event, shortcuts);
         }
     }, 100)); // Adjust debounce delay as needed
 });
 
+
+
 //OPTIONS.HTML RENDER FUNCTIONS
-if (document.getElementById('CreateButton')){
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+if(document.getElementById('ShortcutList-2888381927465823')){
+
+
 document.getElementById('CreateButton').addEventListener('click', function() {
     const shortcut = document.getElementById('CreateShortcut').value;
     const fullMessage = document.getElementById('CreateFullMessage').value;
     console.log(shortcut, fullMessage);
     addShortcut(shortcut.toString(), fullMessage.toString());
-})};
+});
 document.getElementById('WipeButton').addEventListener('click', wipeStorage);
 
-
-if(document.getElementById('ShortcutList-2888381927465823')){
 const render = document.getElementById('ShortcutList-2888381927465823');
 chrome.storage.local.get(['shortcuts'], function(result) {
     const shortcuts = result.shortcuts || [];
@@ -132,7 +141,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
                         // Create a span element to wrap the shortcut message
                         const shortcutMessageSpan = document.createElement('span');
                         shortcutMessageSpan.textContent = `${newShortcut} - ${newFullMessage}`;
-
+                            
                         // Append the span element to the li element
                         li.appendChild(shortcutMessageSpan);
                         li.removeChild(newShortcutInput);
