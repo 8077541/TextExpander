@@ -62,10 +62,12 @@ chrome.storage.local.get(['shortcuts'], function(result) {
         };
     }
 
-    // Attach event listeners to all input and textarea elements
-    document.querySelectorAll('input, textarea').forEach(element => {
-        element.addEventListener('input', debounce(replaceText, 100));
-    });
+    // Attach event listener to the document for event delegation
+    document.addEventListener('input', debounce(function(event) {
+        if (event.target.matches('input, textarea')) {
+            replaceText(event);
+        }
+    }, 100));
 });
 
 
