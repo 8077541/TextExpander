@@ -40,30 +40,19 @@ function addShortcut(shortcut, fullMessage) {
 chrome.storage.local.get(['shortcuts'], function(result) {
     const shortcuts = result.shortcuts || [];
 
-    function replaceText(event, shortcuts) {
+    function replaceText(event) {
         const input = event.target;
         let inputValue = input.value;
-    
+
         shortcuts.forEach(({ shortcut, fullMessage }) => {
             const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const reg = new RegExp(escapedShortcut, 'g');
             inputValue = inputValue.replace(reg, fullMessage);
         });
-        // Find all textareas with class "value" and update their values
-        const textareas = document.querySelectorAll('textarea.value');
-        textareas.forEach(textarea => {
-            const shortcut = textarea.getAttribute('shortcut');
-            const fullMessage = textarea.getAttribute('fullMessage');
-            if (shortcut && fullMessage) {
-                const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const reg = new RegExp(escapedShortcut, 'g');
-                const inputValue = textarea.value.replace(reg, fullMessage);
-                textarea.value = inputValue;
-            }
-        });
+
         input.value = inputValue;
     }
-    
+
     // Debounce function to limit the rate of input event handling
     function debounce(func, wait) {
         let timeout;
@@ -72,20 +61,11 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
-    
-    // Event listener to detect typing in input fields
-    function handleEvent(event) {
-        let focusedElement = event.target;
-        
-        // Check if the focused element is an input or textarea
-        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA') {
-            replaceText(event, shortcuts);
-        }
-    }
-    
-    document.addEventListener('input', debounce(handleEvent, 100)); // Adjust debounce delay as needed
-    document.addEventListener('keydown', debounce(handleEvent, 100)); // Adjust debounce delay as needed
-    document.addEventListener('keyup', debounce(handleEvent, 100)); // Adjust debounce delay as needed // Adjust debounce delay as needed
+
+    // Attach event listeners to all input and textarea elements
+    document.querySelectorAll('input, textarea').forEach(element => {
+        element.addEventListener('input', debounce(replaceText, 100));
+    });
 });
 
 
