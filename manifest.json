@@ -6,11 +6,12 @@
       {
         "matches": ["<all_urls>"],
         "js": ["content.js"],
-        "run_at": "document_end"
+        "run_at": "document_end",
+        "all_frames": true
       }
     ],
  
-   "permissions": [ "storage", "activeTab"],
+    "permissions": [ "storage", "clipboardRead", "clipboardWrite", "offscreen", "scripting", "activeTab" ],
     "action": {
         "default_popup": "popup.html"
       }

@@ -36,13 +36,15 @@ function addShortcut(shortcut, fullMessage) {
         saveToStorage(shortcuts);
     });
 }
-// Retrieve shortcuts from storage
+console.log('Content script loaded');
 chrome.storage.local.get(['shortcuts'], function(result) {
     const shortcuts = result.shortcuts || [];
+    console.log('Shortcuts loaded:', shortcuts);
 
     function replaceText(event) {
         const input = event.target;
         let inputValue = input.value;
+        console.log('Original input value:', inputValue);
 
         shortcuts.forEach(({ shortcut, fullMessage }) => {
             const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -50,6 +52,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             inputValue = inputValue.replace(reg, fullMessage);
         });
 
+        console.log('Modified input value:', inputValue);
         input.value = inputValue;
     }
 
@@ -58,18 +61,63 @@ chrome.storage.local.get(['shortcuts'], function(result) {
         let timeout;
         return function(...args) {
             clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
+            timeout = setTimeout(() => {
+                console.log('Debounced function called');
+                func.apply(this, args);
+            }, wait);
         };
     }
 
-    // Attach event listener to the document for event delegation
-    document.addEventListener('input', debounce(function(event) {
-        if (event.target.matches('input, textarea')) {
-            replaceText(event);
+    function attachListeners(element) {
+        if (element.shadowRoot) {
+            element.shadowRoot.querySelectorAll('*').forEach(attachListeners);
         }
-    }, 100));
-});
+        element.addEventListener('input', debounce(replaceText, 300));
+    }
 
+    function traverseAndAttachListeners(root) {
+        root.querySelectorAll('*').forEach(element => {
+            attachListeners(element);
+            if (element.shadowRoot) {
+                traverseAndAttachListeners(element.shadowRoot);
+            }
+        });
+    }
+
+    // Attach event listener to the document for event delegation
+    document.addEventListener('focusin', function(event) {
+        const target = event.target;
+        console.log('Focus on element detected:', target.tagName, target.type);
+        attachListeners(target);
+        if (target.shadowRoot) {
+            traverseAndAttachListeners(target.shadowRoot);
+        }
+    });
+
+    // Handle iframes
+    function handleIframes() {
+        document.querySelectorAll('iframe').forEach(iframe => {
+            try {
+                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDocument.addEventListener('focusin', function(event) {
+                    const target = event.target;
+                    console.log('Focus on element in iframe detected:', target.tagName, target.type);
+                    attachListeners(target);
+                    if (target.shadowRoot) {
+                        traverseAndAttachListeners(target.shadowRoot);
+                    }
+                });
+                traverseAndAttachListeners(iframeDocument);
+            } catch (e) {
+                console.error('Error accessing iframe content:', e);
+            }
+        });
+    }
+
+    handleIframes();
+    // Re-check iframes periodically in case new ones are added dynamically
+    setInterval(handleIframes, 1000);
+});
 
 
 //OPTIONS.HTML RENDER FUNCTIONS
