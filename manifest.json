@@ -10,7 +10,9 @@
         "all_frames": true
       }
     ],
- 
+    "icons": {
+      "48": "icons/icon48.png"
+   },
     "permissions": [ "storage", "clipboardRead", "clipboardWrite", "offscreen", "scripting", "activeTab" ],
     "action": {
         "default_popup": "popup.html"
