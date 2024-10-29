@@ -72,7 +72,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
         if (element.shadowRoot) {
             element.shadowRoot.querySelectorAll('*').forEach(attachListeners);
         }
-        element.addEventListener('input', debounce(replaceText, 300));
+        element.addEventListener('input', debounce(replaceText, 150));
     }
 
     function traverseAndAttachListeners(root) {
