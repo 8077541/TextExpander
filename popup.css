@@ -1,4 +1,15 @@
 body{
-    background-color: black;
+    background-color: orange;
     color: white;
+}
+button{
+    background-color: purple ;
+    color: white;
+    justify-content: center;
+    text-align: center;
+}
+a{
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
 }
