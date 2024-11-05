@@ -1,14 +1,14 @@
 // Save an array of shortcuts and full messages to storage
 function saveToStorage(shortcuts) {
     chrome.storage.local.set({ 'shortcuts': shortcuts }, function() {
-        console.log('Shortcuts and full messages saved to storage');
+   
     });
  location.reload();
 }
 // Function to wipe the storage
 function wipeStorage() {
     chrome.storage.local.clear(function() {
-        console.log('Storage wiped');
+      
         location.reload();
     });
 
@@ -21,7 +21,7 @@ const shortcuts = [
 // Function to console log the chrome storage local
 function logStorage() {
     chrome.storage.local.get(null, function(result) {
-        console.log(result);
+    
     });
 }
 
@@ -44,7 +44,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
     function replaceText(event) {
         const input = event.target;
         let inputValue = input.value;
-        console.log('Original input value:', inputValue);
+    
 
         shortcuts.forEach(({ shortcut, fullMessage }) => {
             const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -52,7 +52,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             inputValue = inputValue.replace(reg, fullMessage);
         });
 
-        console.log('Modified input value:', inputValue);
+
         input.value = inputValue;
     }
 
@@ -62,7 +62,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
         return function(...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-                console.log('Debounced function called');
+           
                 func.apply(this, args);
             }, wait);
         };
@@ -87,7 +87,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
     // Attach event listener to the document for event delegation
     document.addEventListener('focusin', function(event) {
         const target = event.target;
-        console.log('Focus on element detected:', target.tagName, target.type);
+        
         attachListeners(target);
         if (target.shadowRoot) {
             traverseAndAttachListeners(target.shadowRoot);
@@ -101,7 +101,7 @@ chrome.storage.local.get(['shortcuts'], function(result) {
                 const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
                 iframeDocument.addEventListener('focusin', function(event) {
                     const target = event.target;
-                    console.log('Focus on element in iframe detected:', target.tagName, target.type);
+                    
                     attachListeners(target);
                     if (target.shadowRoot) {
                         traverseAndAttachListeners(target.shadowRoot);

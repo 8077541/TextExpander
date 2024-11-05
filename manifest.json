@@ -13,7 +13,7 @@
     "icons": {
       "96": "icons/image96.png"
    },
-    "permissions": [ "storage", "clipboardRead", "clipboardWrite", "offscreen", "scripting", "activeTab" ],
+    "permissions": [ "storage"],
     "action": {
         "default_popup": "popup.html"
       }
