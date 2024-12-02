@@ -113,10 +113,12 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             }
         });
     }
-
+    
     handleIframes();
-    // Re-check iframes periodically in case new ones are added dynamically
-    setInterval(handleIframes, 1000);
+    
+    // Trigger handleIframes on click events
+    document.addEventListener('click', handleIframes);
+    
 });
 
 
