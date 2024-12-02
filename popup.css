@@ -1,12 +1,31 @@
 body{
-    background-color: orange;
-    color: white;
+    background-color: #1A1A19;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+            border: #0b0b0b;
+            border-style: solid;
+            border-width: 2px;
+            color: white;
 }
 button{
-    background-color: purple ;
+    background-color: #660099;
     color: white;
+    font-weight: 700;
+    border: none;
+    border: #660099;
+    border-style: solid;
+    border-width: 1px;
+    height: 30px;
+    box-shadow: 3px 3px 3px rgba(40, 40, 40, 0.3);
+    border-radius: 5px;
     justify-content: center;
-    text-align: center;
+}
+button:hover {
+    background-color: #b54ee9;
+    color: black;
+    cursor: pointer;
+    color: white;
 }
 a{
     color: white;

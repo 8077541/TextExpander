@@ -11,7 +11,7 @@
       }
     ],
     "icons": {
-      "96": "icons/image96.png"
+      "64": "icons/image64.png"
    },
     "permissions": [ "storage"],
     "action": {
