@@ -24,7 +24,6 @@ function logStorage() {
     
     });
 }
-
 function addShortcut(shortcut, fullMessage) {
     chrome.storage.local.get(['shortcuts'], function(result) {
         const shortcuts = result.shortcuts || [];
@@ -43,8 +42,13 @@ chrome.storage.local.get(['shortcuts'], function(result) {
 
     function replaceText(event) {
         const input = event.target;
-        let inputValue = input.value;
-    
+        let inputValue;
+
+        if (input.isContentEditable) {
+            inputValue = input.innerHTML;
+        } else {
+            inputValue = input.value;
+        }
 
         shortcuts.forEach(({ shortcut, fullMessage }) => {
             const escapedShortcut = shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -52,8 +56,11 @@ chrome.storage.local.get(['shortcuts'], function(result) {
             inputValue = inputValue.replace(reg, fullMessage);
         });
 
-
-        input.value = inputValue;
+        if (input.isContentEditable) {
+            input.innerHTML = inputValue;
+        } else {
+            input.value = inputValue;
+        }
     }
 
     // Debounce function to limit the rate of input event handling
@@ -62,38 +69,18 @@ chrome.storage.local.get(['shortcuts'], function(result) {
         return function(...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-           
                 func.apply(this, args);
             }, wait);
         };
     }
 
-    function attachListeners(element) {
-        if (element.shadowRoot) {
-            element.shadowRoot.querySelectorAll('*').forEach(attachListeners);
-        }
-        element.addEventListener('input', debounce(replaceText, 150));
-    }
+    const debouncedReplaceText = debounce(replaceText, 300);
 
-    function traverseAndAttachListeners(root) {
-        root.querySelectorAll('*').forEach(element => {
-            attachListeners(element);
-            if (element.shadowRoot) {
-                traverseAndAttachListeners(element.shadowRoot);
-            }
-        });
-    }
-
-    // Attach event listener to the document for event delegation
-    document.addEventListener('focusin', function(event) {
-        const target = event.target;
-        
-        attachListeners(target);
-        if (target.shadowRoot) {
-            traverseAndAttachListeners(target.shadowRoot);
+    document.addEventListener('input', function(event) {
+        if (event.target.matches('input, textarea, [contenteditable="true"]')) {
+            debouncedReplaceText(event);
         }
     });
-
     // Handle iframes
     function handleIframes() {
         document.querySelectorAll('iframe').forEach(iframe => {
